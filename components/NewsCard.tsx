@@ -24,13 +24,23 @@ const NewsCard: React.FC<NewsCardProps> = ({ item, onClick, isRead = false }) =>
         ${isHighImpact 
           ? isRead 
             ? 'bg-red-950/10 border-red-900/20' 
-            : 'bg-red-950/20 border-red-500/30 hover:border-red-500/60' 
+            : 'bg-red-950/20 border-red-500/30' 
           : isRead
             ? 'bg-slate-800/20 border-slate-800/40'
             : 'bg-slate-800/40 border-slate-700/50 hover:border-cyan-500/50'
         }
       `}
     >
+      {/* High Impact Flashing Overlay (Visual Alert) */}
+      {isHighImpact && !isRead && (
+         <>
+            {/* Pulsing red border and inset shadow */}
+            <div className="absolute inset-0 rounded-xl border-2 border-red-500/60 shadow-[inset_0_0_20px_rgba(220,38,38,0.2)] animate-pulse pointer-events-none z-20"></div>
+            {/* Subtle red background flush */}
+            <div className="absolute inset-0 bg-red-600/5 animate-pulse pointer-events-none z-0"></div>
+         </>
+      )}
+
       {/* Decorative pulse for high impact (only if unread) */}
       {isHighImpact && !isRead && (
         <div className="absolute top-0 right-0 p-2 z-10">
@@ -48,22 +58,27 @@ const NewsCard: React.FC<NewsCardProps> = ({ item, onClick, isRead = false }) =>
          </div>
       )}
 
-      <div className="p-5">
+      <div className="p-5 relative z-10">
         <div className="flex justify-between items-start mb-2">
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded tracking-wider ${
             isRead 
               ? 'bg-slate-700/30 text-slate-500' 
-              : isHighImpact ? 'bg-red-500/20 text-red-300' : 'bg-cyan-500/20 text-cyan-300'
+              : isHighImpact ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-cyan-500/20 text-cyan-300'
           }`}>
             {item.category.toUpperCase()}
           </span>
-          <span className="text-xs text-slate-500 font-mono">{item.timestamp}</span>
+          <span 
+            className="text-xs text-slate-500 font-mono hover:text-cyan-400 transition-colors cursor-help border-b border-dashed border-slate-700 hover:border-cyan-500/50"
+            title={item.fullDate || "具体时间未知"}
+          >
+            {item.timestamp}
+          </span>
         </div>
         
         <h3 className={`text-lg font-bold mb-2 leading-tight transition-colors ${
             isRead 
              ? 'text-slate-400' 
-             : isHighImpact ? 'text-white' : 'text-slate-100 group-hover:text-cyan-400'
+             : isHighImpact ? 'text-white drop-shadow-md' : 'text-slate-100 group-hover:text-cyan-400'
         }`}>
           {item.title}
         </h3>
@@ -73,7 +88,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ item, onClick, isRead = false }) =>
         </p>
       </div>
 
-      <div className={`px-5 pb-4 pt-0 flex items-center justify-between border-t mt-auto pt-3 ${isRead ? 'border-slate-800' : 'border-white/5'}`}>
+      <div className={`px-5 pb-4 pt-0 flex items-center justify-between border-t mt-auto pt-3 relative z-10 ${isRead ? 'border-slate-800' : 'border-white/5'}`}>
         {/* Source reliability indicator */}
         <div className={`flex items-center gap-1.5 text-[10px] font-mono transition-colors ${
              isRead ? 'text-slate-600' : 'text-slate-500 group-hover:text-emerald-400'
@@ -93,8 +108,12 @@ const NewsCard: React.FC<NewsCardProps> = ({ item, onClick, isRead = false }) =>
       </div>
       
       {/* Background decoration (only unread) */}
-      {!isRead && (
-          <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-2xl group-hover:from-cyan-500/10 transition-colors pointer-events-none"></div>
+      {!isRead && !isHighImpact && (
+          <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-br from-white/5 to-transparent rounded-full blur-2xl group-hover:from-cyan-500/10 transition-colors pointer-events-none z-0"></div>
+      )}
+       {/* High Impact Background glow */}
+       {!isRead && isHighImpact && (
+          <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-red-600/20 rounded-full blur-3xl animate-pulse pointer-events-none z-0"></div>
       )}
     </div>
   );

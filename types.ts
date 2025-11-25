@@ -9,6 +9,7 @@ export interface NewsItem {
   summary: string;
   fullContent: string;
   timestamp: string;
+  fullDate?: string;
   category: string;
   impactLevel: 'HIGH' | 'MEDIUM' | 'LOW';
   sources?: Source[];

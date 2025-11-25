@@ -40,6 +40,7 @@ export const fetchBreakingNews = async (topic: string): Promise<NewsItem[]> => {
            "summary": "客观简练的摘要（中文，最多 50 字）",
            "fullContent": "详细报道（约 200 字，中文）。如果搜索结果中有具体数据（如财报营收、净利润、增长率）、引用或日期，请务必包含。使用 Markdown 格式。",
            "timestamp": "相对时间（例如：'2小时前' 或 '刚刚'）",
+           "fullDate": "具体的发布日期和时间（格式：YYYY-MM-DD HH:mm，如 2023-10-27 14:30）",
            "category": "科技/商业/财经/军事/政治/生物/国际/科学",
            "impactLevel": "HIGH" (如果是重大突发新闻) 或 "MEDIUM" 或 "LOW"
          }
